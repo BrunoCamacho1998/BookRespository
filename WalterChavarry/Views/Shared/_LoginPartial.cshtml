@@ -1,0 +1,37 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @*<ul class="sesion_usuario">
+            <li class="usuario_register">*@
+            <label title="Desconectar" style="color:white;cursor:pointer;right:0;font-size:14px;" id="inicioSesion"><a style="color:white;text-decoration:none" href="javascript:document.getElementById('logoutForm').submit()">@User.Identity.GetUserName()</a></label>
+        @*</li>
+
+
+            </ul>*@
+        @*<a id="cerrar_sesion" href="javascript:document.getElementById('logoutForm').submit()" class="cerrar_sesion">Cerrar sesión</a>*@
+    }
+}
+else
+{
+    @Html.ActionLink("Iniciar sesión", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @style = "color:white; text-decoration:none" })
+    @*<li class="usuario_register">@Html.ActionLink("Registrarse", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "usuario_register" })</li>*@
+
+}
+
+<script>
+    document.getElementById('inicioSesion').addEventListener('click', function () {
+        var cierre = document.getElementById('cerrar_sesion');
+
+        var display = window.getComputedStyle(cierre).getPropertyValue('display');
+        if (display === 'none') {
+            cierre.style.display = 'block';
+        }
+        else {
+            cierre.style.display = 'none';
+        }
+    });
+</script>

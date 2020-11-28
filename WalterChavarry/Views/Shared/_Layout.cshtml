@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/Content/Navbar.css" type="text/css" />
+    <script src="~/Scripts/Property.js" type="text/javascript" lang="es"></script>
+    <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <nav class="Nav_App">
+        <ul>
+            <li >
+                <img src="~/Content/Imagenes/3209203-24.png" alt="" onclick="window.location.href = '/Home/Index';" />
+                <label onclick="window.location.href = '/Home/Index';">Aula Virtual</label>
+            </li>
+            <li>
+                <section>
+                    @Html.ActionLink("Inicio", "Index", "Home", new { area = "" }, new { @style = "color:white; text-decoration:none" })
+                </section>
+            </li>
+            <li>
+                <section>
+                    @Html.ActionLink("Sesiones", "Index", "Sesion", new { area = "" }, new { @style = "color:white; text-decoration:none" })
+                </section>
+            </li>
+            <li>
+                <section>
+                    @Html.ActionLink("Libros", "Index", "Libros", new { area = "" }, new { @style = "color:white; text-decoration:none" })
+                </section>
+            </li>
+            @*<li>
+                <section>
+                    Enlaces
+                </section>  
+            </li>*@
+            <li>
+                <section style="width: 13rem;">
+                    @Html.Partial("_LoginPartial")
+                </section>
+            </li>
+            <li id="list_sandwidch" onclick="VisibleSideMenu();">
+                <div class="div_sandwich_principal">
+                    <div class="div_sandwich"></div>
+                    <div class="div_sandwich"></div>
+                    <div class="div_sandwich"></div>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    <div class="div_sideMenu" id="div_sideMenu">
+        <div class="SideMenu" id="SideMenu">
+            <ul>
+                <li>
+                    <img width="30" style="vertical-align: -5px;" src="~/Content/Imagenes/iconfinder-icon.svg" alt="" /> <label>Menú</label>
+                </li>
+                <li>
+                    @Html.Partial("_LoginPartial")
+                </li>
+                <li onclick="document.getElementById('InicioLink').click();">
+                    @Html.ActionLink("Inicio", "Index", "Home", new { area = "" }, new { @style = "color:white; text-decoration:none", @id = "InicioLink" })
+                </li>
+                <li onclick="document.getElementById('SesionesLink').click();">
+                    @Html.ActionLink("Sesiones", "Index", "Sesion", new { area = "" }, new { @style = "color:white; text-decoration:none", @id = "SesionesLink" })
+                </li>
+                <li onclick="document.getElementById('LibrosLink').click();">
+                    @Html.ActionLink("Libros", "Index", "Libros", new { area = "" }, new { @style = "color:white; text-decoration:none", @id = "LibrosLink" })
+                </li>
+
+            </ul>
+        </div>
+    </div>
+    <script>
+        window.addEventListener('resize', function () {
+            var width = window.innerWidth;
+
+            if (width > 700) {
+                document.getElementById('SideMenu').style.width = '0px';
+                setTimeout(
+                    () => {
+                        document.getElementById('div_sideMenu').style.display = 'none';
+                    }
+                    , 500)
+               
+            }
+        })
+    </script>
+    <script>
+        document.getElementById('div_sideMenu').addEventListener('click', function () {
+            document.getElementById('list_sandwidch').click();
+        });
+    </script>
+   
+   
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

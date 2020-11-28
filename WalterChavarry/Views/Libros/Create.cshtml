@@ -1,0 +1,138 @@
+﻿@model WalterChavarry.Models.Libros
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/Content/body.css" type="text/css" />
+    <title>Crear Libro</title>
+</head>
+<body style="background-color: rgba(0, 0, 0, 0.017) !important;">
+    <div class="div_create_libro">
+
+        @using (Html.BeginForm("Create", "Libros", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+        <div class="create_body">
+
+
+            <div class="form-horizontal">
+                <label class="span_titulo">Nuevo libro</label><br /><br />
+
+                <div class="form-group" style="margin-top:30px;">
+                    @Html.Label("Archivo", htmlAttributes: new { @class = "col-md-2 span_comentario" })
+                    <div class="col-md-10 col_per">
+                        <input type="file" name="archivo_libro" id="archivo_libro" />
+                        <input type="text" name="TipoArchivo" id="tipo_archivo" style="display:none"/>
+                        @Html.ValidationMessageFor(model => model.Imagen_libro, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+
+                    <div class="col-md-10  col_per" style="display:flex; width:100%">
+                        @Html.EditorFor(model => model.Titulo, new { htmlAttributes = new { @class = "nombre_input_nuevo_comentario input_text", @placeholder = "Agregar título...", @id = "nombre_documento" } })
+                        @Html.ValidationMessageFor(model => model.Titulo, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.Autor, new { htmlAttributes = new { @class = "nombre_input_nuevo_comentario input_text", @placeholder = "Agregar autor..." } })
+                        @Html.ValidationMessageFor(model => model.Autor, "", new { @class = "text-dange" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+
+                    <div class="col-md-10  col_per" style="display:flex;width:100%;">
+                        <div style="width:48%;" class="div_idioma_lista">
+                            @Html.EditorFor(model => model.Idioma, new { htmlAttributes = new { @class = "nombre_input_nuevo_comentario idioma_input", @placeholder = "Agregar idioma...", @style = "margin-top:30px", @id = "idioma_input" } })
+                            @Html.ValidationMessageFor(model => model.Idioma, "", new { @class = "text-danger" })
+                        </div>
+                        <div style="margin-left:20px" class="div_fecha_lista">
+                            @Html.Label("Fecha:", htmlAttributes: new { @class = "span_comentario label_create", @style = "margin-left:0px;" })<br />
+                            @Html.EditorFor(model => model.Dia, new { htmlAttributes = new { @class = "nombre_input_nuevo_comentario input_numeric", @min = "1", @max = "31", @placeholder = "Dia" } })
+                          
+                            @Html.EditorFor(model => model.Mes, new { htmlAttributes = new { @class = "nombre_input_nuevo_comentario input_numeric", @min = "1", @max = "12", @placeholder = "Mes" } })
+                           
+                            @Html.EditorFor(model => model.Anio, new { htmlAttributes = new { @class = "nombre_input_nuevo_comentario input_numeric", @min = "1980", @max = "2020", @placeholder = "Año" } })
+                          
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+
+                    <div class="col-md-10  col_per" style="width:100%">
+
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Descripcion, htmlAttributes: new { @class = "span_comentario label_create" })
+                    <br />
+                    <div class="col-md-10  col_per" style="width:100%">
+                        <textarea name="Descripcion" class="comentario_input_nuevo_comentario" wrap="soft" placeholder="Agregar descripción..." id="area_comentario"></textarea>
+
+                        @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.Label("Palabras clave", htmlAttributes: new { @class = "span_comentario label_create" }) <label class="tiempo_comentario">(Separar con ";")</label>
+                    <br />
+                    <div class="col-md-10  col_per" style="width:100%">
+                        @Html.EditorFor(model => model.PalabrasClave, new { htmlAttributes = new { @class = "nombre_input_nuevo_comentario", @placeholder = "Agregar..." } })
+                        @Html.ValidationMessageFor(model => model.PalabrasClave, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group" style="margin-top:30px;">
+                    @Html.Label("Imagen", htmlAttributes: new { @class = "col-md-2 span_comentario" })
+                    <div class="col-md-10 col_per">
+                        <input type="file" name="imagen_libro" />
+                        @Html.ValidationMessageFor(model => model.Imagen_libro, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10  col_per">
+                        <input type="submit" value="CREAR" class="agregar_button" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+                }
+    </div>
+
+   
+    <script>
+        window.addEventListener('load', function () {
+            var width
+            document.getElementById('create_body').style.width = (window.innerWidth - 100) + 'px';
+        });
+        window.addEventListener('resize', function () {
+            document.getElementById('create_body').style.width = (window.innerWidth - 100) + 'px';
+        });
+
+
+        document.getElementById('archivo_libro').addEventListener('change', function () {
+            var nombre = document.getElementById('archivo_libro').files[0].name;
+            var tipo_archivo = nombre.lastIndexOf(".");
+            var nombre_archivo = nombre.substr(tipo_archivo);
+            document.getElementById('tipo_archivo').value = nombre_archivo;
+        });
+            
+    </script>
+</body>
+</html>
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

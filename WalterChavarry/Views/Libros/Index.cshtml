@@ -1,0 +1,286 @@
+﻿@model IEnumerable<WalterChavarry.Models.Libros>
+@using WalterChavarry.Servicios
+@using WalterChavarry.Models
+@using Microsoft.AspNet.Identity
+
+
+@{
+    ILibrosService libroServ = new LibrosService();
+    int varId = 0;
+    Libros libroItem = new Libros();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/Content/body.css" type="text/css" />
+    <title>Libros</title>
+</head>
+<body style="background-color: rgba(0, 0, 0, 0.017) !important;">
+
+    <div>
+        <div class="div_titulo">
+            <div class="div_sandwich_principal_lista" onclick="VisibleMenuDocumentos();">
+                <div class="div_sandwich_lista"></div>
+                <div class="div_sandwich_lista"></div>
+                <div class="div_sandwich_lista"></div>
+            </div>
+            <div class="title_div">
+                <img src="~/Content/Imagenes/iconfinder_icon-55-document-text_315178.svg" alt="" onclick="window.location.href = '/Libros/Index';" />
+                <label style="font-weight:500" onclick="window.location.href = '/Libros/Index';">Documentos</label>
+            </div>
+            <div class="search_div">
+                @using (Html.BeginForm("Index", "Libros", FormMethod.Post))
+                {
+                    <input type="search" name="Palabra" />
+                    <input type="submit" />
+                }
+
+            </div>
+        </div>
+    </div>
+    <div>
+        <script>
+            function BusquedaIdioma(id) {
+                var text = document.getElementById(id).innerText;
+                document.getElementById('text_idioma').value = text;
+                document.getElementById('btn_idioma').click();
+            }
+        </script>
+        <div class="div_documentos" id="div_documentos">
+            <div style="text-align:left;height:30px;padding:5px 14px">
+                @{ 
+                    if (User.Identity.GetUserName().CompareTo("WalterChavarry20") == 0)
+                    {
+                        <a style="margin-top:-5px;text-decoration:none" class="agregar_button" href="@Url.Action("Create","Libros")">AGREGAR</a>
+                    }
+
+ }
+                @{
+                    string respuesta = "";
+                    if (Model.Count() == 0)
+                    {
+                        respuesta = "No se han encontrado resultados.";
+                    }
+                    else
+                    {
+                        if (Model.Count() == 1)
+                        {
+                            respuesta = "Se han encontrado " + Model.Count() + " resultado.";
+                        }
+
+                        else
+                        {
+                            respuesta = "Se han encontrado " + Model.Count() + " resultados.";
+                        }
+
+                    }
+
+                }
+                <label class="nResults">
+                    @respuesta
+                </label>
+
+
+            </div>
+            <div>
+
+                @{
+                    foreach (var item in Model)
+                    {
+                        string itemId = "item" + item.LibrosId;
+                        <div class="grid_principal">
+                            <div class="div_documentos_item" id="documentos_item">
+                                <ul>
+                                    <li>
+                                        <div class="Image_document">
+                                            <img width="180" height="210" src="@Url.Action("GetImage", "Libros", new { libroId = item.LibrosId })" />
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="data_document" id="data_document">
+                                            <div>
+                                                <label class="titulo_documento" title="@item.Titulo" id="titulo_documento">@Html.Label(item.Titulo)</label>
+
+                                            </div>
+                                            <div class="datos_libro">
+                                                <label>@Html.Label(item.Autor) - </label>
+                                                <label>@Html.Label(Convert.ToString(item.Anio))</label>
+
+                                            </div>
+                                            <div>
+
+                                                <label class="descripcion_documento" id="descripcion_documento">@item.Descripcion</label>
+                                            </div>
+                                            <div>
+                                                <label class="Palabras_documento">Palabras claves:</label> @Html.Label(item.PalabrasClave, new { @style = "font-weight:100; letter-spacing:0.2px", @class = "palabras_clave_documento" })
+                                            </div>
+                                            @{string id_detalle_button = "button_detalle" + item.LibrosId;}
+                                            <div class="button_detalle"
+                                                 onclick="document.getElementById(@id_detalle_button).click();">
+                                                <a id="@id_detalle_button" href="@Url.Action("Detalle_Libro", "Libros", new { LibroId = item.LibrosId })">Más Detalles</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    }
+                }
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="div_menu_documentos" id="div_menu_documentos">
+        <div class="menu_documentos" id="menu_documentos">
+
+            <div class="options_menu">
+                <span class="aspa_close_modal aspa_especial" onclick="document.getElementById('div_menu_documentos').style.display = 'none';">&#215;</span>
+                <div>
+                    <span>Búsqueda</span>
+                </div>
+                <div class="option_year">
+                    <div>
+                        <label class="label_subtitle">Por año</label>
+                    </div>
+                    <div>
+                        @{
+                            int anio = DateTime.Now.Year;
+                            int i = 0;
+                        }
+
+                        @using (Html.BeginForm("Index", "Libros", FormMethod.Post))
+                        {
+                            <ul class="list_years">
+                                @{
+                                    for (int ianio = 0; ianio < 4; ianio++)
+                                    {
+                                        string anioId = "valueanio" + ianio;
+                                        <li onclick="ChangeAnio('valueanio' + @ianio);">
+                                            Desde @(anio - ianio)
+                                            <input type="number" id="@anioId" value="@(anio - ianio)" style="display:none" />
+                                            <input name="Palabra" value="@ViewBag.palabra" style="display:none" />
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                            <script>
+                                function ChangeAnio(id) {
+                                    var valueanio = document.getElementById(id);
+                                    document.getElementById('FechaInicial').value = valueanio.value;
+                                    document.getElementById('YearSubmit').click();
+                                }
+                            </script>
+                            <input type="number" id="FechaInicial" name="FechaInicial" style="display:none" />
+                            <input type="number" value="0" name="FechaFinal" style="display:none" />
+                            <input type="submit" id="YearSubmit" style="display:none" />
+                        }
+
+                        <label class="label_subtitle label_subtitle_select" style="padding-top:10px; padding-bottom:8px;" onclick="document.getElementById('form_intervalo').style.display = 'block';">Por Intervalo</label>
+                        <br />
+                        @using (Html.BeginForm("Index", "Libros", FormMethod.Post, new { @style = "text-align:center; display:none", @id = "form_intervalo" }))
+                        {
+                            <input type="number" value="1980" name="FechaInicial" min="1980" max="@(anio - 1)" class="Typetext_menu" /> <label>-</label>
+                            <input type="number" value="@anio" name="FechaFinal" max="@anio" min="1981" class="Typetext_menu" />
+                            <br />
+                            <input name="Palabra" value="@ViewBag.palabra" style="display:none" />
+                            <input type="submit" id="YearSubmit" value="Buscar" class="buttom_menu" />
+                        }
+
+                    </div>
+                </div>
+                <div class="div_order">
+                    <div>
+                        <span>Ordenar</span>
+                    </div>
+                    <div class="order_options">
+                        @using (Html.BeginForm("Index", "Libros", FormMethod.Post))
+                        {
+                            <div class="div_options_order">
+                                <label class="label_subtitle label_subtitle_select" id="label_fecha" onclick="Ordenar('label_fecha');">Por fecha</label>
+                            </div>
+                            <div>
+                                <label class="label_subtitle label_subtitle_select" id="label_nombre" onclick="Ordenar('label_nombre');">Por nombre</label>
+                            </div>
+                            <input name="Palabra" value="@ViewBag.palabra" style="display:none" />
+                            <input type="text" style="display:none" name="var_orden" id="text_orden" />
+                            <input type="submit" style="display:none" id="btn_orden" />
+                        }
+
+                        <script>
+                            function Ordenar(id) {
+                                var text = document.getElementById(id).innerText;
+                                document.getElementById('text_orden').value = text;
+                                document.getElementById('btn_orden').click();
+                            }
+                        </script>
+
+                    </div>
+                </div>
+                <div class="div_idioma">
+                    <div>
+                        <span>Idioma</span>
+                    </div>
+                    <div class="order_options">
+                        @using (Html.BeginForm("Index", "Libros", FormMethod.Post))
+                        {
+                            <div class="div_options_order">
+                                <label class="label_subtitle label_subtitle_select" id="label_cualquier_idioma" onclick="BusquedaIdioma('label_cualquier_idioma');">Cualquier idioma</label>
+                            </div>
+                            <div>
+                                <label class="label_subtitle label_subtitle_select" id="label_espaniol" onclick="BusquedaIdioma('label_espaniol');">Solo español</label>
+                            </div>
+                            <input name="Palabra" value="@ViewBag.palabra" style="display:none" />
+                            <input type="text" id="text_idioma" style="display:none" name="idioma" />
+                            <input type="submit" id="btn_idioma" style="display:none" />
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <script>
+        window.addEventListener('load', function () {
+            setTimeout(function () {
+                document.getElementById('div_documentos').style.maxHeight = (window.innerHeight - 100) + 'px';
+
+            }, 100);
+        });
+
+        window.addEventListener('resize', function () {
+            var height = window.innerHeight;
+            var width = this.window.innerWidth;
+            var SideDiver = document.getElementById('div_menu_documentos');
+            var DivSide = document.getElementById('menu_documentos');
+            document.getElementById('div_documentos').style.maxHeight = (height - 100) + 'px';
+
+            if (width > 780) {
+                SideDiver.style.display = 'block';
+                DivSide.style.width = '17.8vw';
+            }
+            else {
+                SideDiver.style.display = 'none';
+                DivSide.style.width = '0px';
+            }
+
+        });
+
+
+        function modal_open(id_libro, autor) {
+            document.getElementById('modal_libro').style.display = 'block';
+            document.getElementById('button_detalle').innerHTML = `<input type="submit" value="Descargar" />`;
+            document.getElementById('datos_libro_detalle').innerHTML = `<img width="180" height="200" src="/Libros/GetImage?libroId=${id_libro}" />`;
+        }
+
+    </script>
+</body>
+</html>

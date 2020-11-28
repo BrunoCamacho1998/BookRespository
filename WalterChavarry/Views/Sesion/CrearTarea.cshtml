@@ -1,0 +1,356 @@
+﻿@model WalterChavarry.Models.Tareas
+@using WalterChavarry.Models
+
+@{
+    Sesion SesionNuevo = ViewBag.sesion as Sesion;
+
+    AdoCollect ad = new AdoCollect();
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/Content/body.css" type="text/css" />
+</head>
+<body style="background-color: rgba(0, 0, 0, 0.017) !important;">
+    <div id="body_complete" class="body_complete">
+        <div class="div_body_detalle_libro" id="div_body_detalle_libro">
+            <div class="div_body_interior_detalle">
+                <div style="margin-bottom:45px">
+                    <a type="submit" style="text-decoration:none" class="agregar_button" href="@Url.Action("Index","Sesion")">RETROCEDER</a>
+                </div>
+                <div>
+                    <input class="agregar_button" type="submit" value="EDITAR" onclick="document.getElementById('modal_libro_edit').style.display = 'block';" />
+                </div>
+
+                <div>
+                    <ul class="lista_detalle">
+                        <li>
+                            <div class="Image_document">
+                                <img width="160" height="180" style="height:230px !important" id="img_detalle" src="https://images.vexels.com/media/users/3/152133/raw/b5d509f8fa813fb3136e2da1f36df154-ilustracion-de-los-iconos-de-la-escuela-de-tarea.jpg" />
+                            </div>
+                        </li>
+                        <li id="second_detalle">
+
+                            <div class="datos_detalle_libro" id="datos_titulo_detalle">
+
+                                <div class="datos_titulo" id="datos_titulo">
+                                    @SesionNuevo.NombreSesion
+                                </div>
+                                <div class="datos_autor_fecha" id="datos_autor_fecha">
+                                    <label class="fecha_Detalle" id="fecha_Detalle">@SesionNuevo.Fecha.Year</label>
+                                </div>
+                                <label style="font-size:15px;font-weight:600 !important;">Descripción:</label>
+                                <div class="datos_descripcion" id="datos_descripcion">
+
+                                    @SesionNuevo.Descripcion
+                                </div>
+                            </div>
+                            @{
+                                List<string> listaPalabras = new List<string>();
+                                string var_palabra = "";
+                                int count = SesionNuevo.Palabras_Clave.ToCharArray().Count();
+                                int ichar = 1;
+                                foreach (char c in SesionNuevo.Palabras_Clave.ToCharArray())
+                                {
+                                    if (ichar < count)
+                                    {
+                                        if (c == ';')
+                                        {
+                                            listaPalabras.Add(var_palabra);
+                                            var_palabra = "";
+                                        }
+                                        else if (c == ' ')
+                                        {
+
+                                        }
+                                        else
+                                        {
+                                            var_palabra += c;
+                                        }
+                                        ichar++;
+                                    }
+                                    else
+                                    {
+                                        var_palabra += c;
+                                        listaPalabras.Add(var_palabra);
+                                        var_palabra = "";
+                                    }
+
+                                }
+                            }
+                            <div class="palabras_detalle" id="palabras_detalle">
+                                Palabras clave:
+                                @{
+                                    foreach (string sitem in listaPalabras)
+                                    {
+                                        <label class="item_palabra" onclick="document.getElementById('input_@sitem').click();">@sitem</label>
+                                        using (Html.BeginForm("Index", "Sesion", FormMethod.Post, new { @style = "display:none" }))
+                                        {
+                                            <input type="text" name="Palabra" value="@sitem" style="display:none" />
+                                            <input type="submit" style="display:none" id="input_@sitem" />
+                                        }
+
+
+                                    }
+                                }
+                            </div>
+
+
+                        </li>
+                    </ul>
+                </div>
+                <hr />
+                <div class="lista_tareas">
+                    <label style="font-weight:500;margin:0px 5px 15px;" class="span_titulo">Tareas</label>
+                    @{
+                        List<Tareas> listaTareasNueva = ViewBag.listaTareas as List<Tareas>;
+                        if (listaTareasNueva.Count() == 0)
+                        {
+                            <br />
+                            <label class="nResults">
+                                No tiene tareas.
+                            </label>
+                        }
+                        else
+                        {
+                            foreach (Tareas tarea in ViewBag.listaTareas as List<Tareas>)
+                            {
+
+                                <ul>
+                                    <li style="text-align:right">
+                                        @using (Html.BeginForm("DeleteTareaConfirmed", "Sesion", FormMethod.Post))
+                                        {
+                                            <input type="number" name="SesionId" value="@SesionNuevo.SesionId" style="display:none" />
+                                            <input type="number" name="TareaId" value="@tarea.TareasId" style="display:none" />
+                                            <label title="Eliminar" class="cancel_input" onclick="document.getElementById('submit_delete').click();">X</label>
+                                            <input type="submit" style="display:none" id="submit_delete" />
+                                        }
+                                    </li>
+                                    <li>
+                                        <label>
+                                            @tarea.Titulo_Tarea
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            Archivos totales: @ad.Archivos.Where(x => x.TareaId == tarea.TareasId).Count()
+                                        </label>
+                                    </li>
+                                </ul>
+                            }
+                        }
+
+                    }
+                    <input type="submit" value="AGREGAR" class="agregar_button" onclick="document.getElementById('modal_libro').style.display = 'block';" />
+                </div>
+
+                <div class="modal_libro" id="modal_libro_edit">
+                    <div class="modal_body_libro" id="modal_body_edit">
+                        <span class="aspa_close_modal" onclick="document.getElementById('modal_libro_edit').style.display= 'none'">&#215;</span>
+
+                        <div>
+                            @using (Html.BeginForm("Edit", "Sesion", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <input type="number" name="SesionId" value="@SesionNuevo.SesionId" style="display:none" id="sesion_id_value" />
+
+                                <div class="form-horizontal">
+                                    <label class="span_titulo">Editar sesión</label><br /><br />
+                                    <div class="form-group">
+                                        <label class="span_comentario label_create">Nombre</label>
+                                        <br />
+                                        <div class="col-md-10 col_per" style="width:100%;">
+                                            <input type="text" name="NombreSesion" value="@SesionNuevo.NombreSesion" class="nombre_input_nuevo_comentario input_text" placeholder="Agregar nombre..." />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.Label("Descripcion", htmlAttributes: new { @class = "span_comentario label_create" })
+                                        <div class="col-md-10  col_per" style="width:100%">
+                                            <textarea name="Descripcion" class="comentario_input_nuevo_comentario" wrap="soft" placeholder="Agregar descripción..." id="area_comentario">@SesionNuevo.Descripcion</textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.Label("Palabras clave", htmlAttributes: new { @class = "span_comentario label_create" }) <label class="tiempo_comentario">(Separar con ";")</label>
+                                        <br />
+                                        <div class="col-md-10  col_per" style="width:100%">
+                                            <input type="text" value="@SesionNuevo.Palabras_Clave" name="Palabras_Clave" class="nombre_input_nuevo_comentario input_text" placeholder="Agregar..." />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-10 col_per">
+                                            <input type="submit" value="ACTUALIZAR" class="agregar_button" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal_libro" id="modal_libro">
+                    <div class="modal_body_libro" id="modal_body_libro">
+                        <span class="aspa_close_modal" onclick="document.getElementById('modal_libro').style.display= 'none'">&#215;</span>
+                        <div>
+                            @using (Html.BeginForm("CrearTarea", "Sesion", FormMethod.Post, new { target = "frame_tarea" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input type="number" name="SesionId" value="@SesionNuevo.SesionId" style="display:none" id="sesion_id_value" />
+                                <div class="form-horizontal">
+                                    <label class="span_titulo">Nueva tarea</label><br /><br />
+                                    <div class="form-group">
+                                        @Html.Label("Título", htmlAttributes: new { @class = "span_comentario label_create" })
+                                        <div class="col-md-10 col_per" style="width:100%">
+                                            @Html.EditorFor(model => model.Titulo_Tarea, new { htmlAttributes = new { @class = "nombre_input_nuevo_comentario input_text", @placeholder = "Agregar título..." } })
+                                            @Html.ValidationMessageFor(model => model.Titulo_Tarea, "", new { @class = "text-dange" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.Label("Descripción", htmlAttributes: new { @class = "span_comentario label_create" })
+                                        <div class="col-md-10 col_per" style="width:100%">
+                                            <textarea name="Descripcion" class="comentario_input_nuevo_comentario" wrap="soft" placeholder="Agregar descripción..." id="area_comentario"></textarea>
+                                            @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-dange" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Instrucciones, htmlAttributes: new { @class = "span_comentario label_create" })
+                                        <div class="col-md-10 col_per" style="width:100%">
+                                            <textarea name="Instrucciones" class="comentario_input_nuevo_comentario" wrap="soft" placeholder="Agregar instrucciones..." id="area_instrucciones"></textarea>
+                                            @Html.ValidationMessageFor(model => model.Instrucciones, "", new { @class = "text-dange" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.Label("Archivo", htmlAttributes: new { @class = "col-md-2 span_comentario" })
+                                        <label class="agregar_button" style="cursor:pointer;margin-top:-10px;" onclick="agregarFiles();">AGREGAR ARCHIVO</label>
+                                        <div class="col-md-10 col_per" id="div_inputs">
+
+                                            @Html.ValidationMessageFor(model => model.SesionId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <input type="submit" style="display:none" id="submit_form_tarea" />
+                                </div>
+                            }
+                            <iframe name="frame_tarea" style="display:none"></iframe>
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="CREAR" class="agregar_button" onclick="clickCrear();" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var contador = 0;
+        window.addEventListener('load', function () {
+            contador = 0;
+        })
+
+        function ChangeArchivo(id) {
+            var nombre = document.getElementById('file_' + id).files[0].name;
+            var tipo_archivo = nombre.lastIndexOf(".");
+            var nombre_archivo = nombre.substring(0, tipo_archivo);
+            var tipoFile = nombre.substr(tipo_archivo+1);
+            document.getElementById('nombreFile_' + id).value = nombre_archivo;
+            document.getElementById('tipoFile_' + id).value = tipoFile;
+        }
+
+        function clickCrear() {
+            var cargar = false;
+            var isub = 0;
+            document.getElementById('submit_form_tarea').click();
+
+            setTimeout(function () {
+                var lista_inputs = document.getElementsByClassName('fileSubmit');
+
+                for (isub = 0; isub < lista_inputs.length; isub++) {
+                    
+                    document.getElementById(lista_inputs[isub].id).click();
+                   
+                }
+                if (isub === lista_inputs.length) {
+                    setTimeout(function () {
+                        window.location.href = '/Sesion/CrearTarea?SesionId=' + document.getElementById('sesion_id_value').value;
+                    }, 3000);
+                }
+            }, 1000);
+            
+            
+        }
+
+        function QuitarFile(id) {
+            var creado = document.getElementById('div_input_' + id);
+            document.getElementById('div_inputs').removeChild(creado);
+            contador--;
+        }
+        
+        function agregarFiles() {
+            var id_sesion = document.getElementById('sesion_id_value').value;
+            var input_creado = document.createElement("div");
+            input_creado.id = "div_input_" + contador;
+            input_creado.innerHTML =
+                `<form action="/Sesion/CreateArchivo" method="post" enctype="multipart/form-data" target="my_frame_${contador}">` +
+                `<label class="cancel_input" onclick="QuitarFile(${contador})">X</label>`+
+                `<input style="padding:8px 0px;display:inline-block;" type="file" name="ArchivoFile" id="file_${contador}" onchange="ChangeArchivo(${contador})"/>` +
+                `<input type="text" id="nombreFile_${contador}" name="NombreArchivo" style="display:none" />` +
+                `<input type="text" id="tipoFile_${contador}" name="Tipo" style="display:none" />` +
+                `<input type="number" id="Sesion_id_${contador}" value="${id_sesion}" name="SesionId" style="display:none" />` +
+                `<input type="submit" class="fileSubmit" id="FileSubmit_${contador}" style="display:none" />` +
+            `</form>`+
+                `<iframe name="my_frame_${contador}" style="display:none"></iframe>`
+                ;
+            document.getElementById('div_inputs').appendChild(input_creado);
+            contador++;
+
+        }
+    </script>
+ 
+    <script>
+        window.addEventListener('load', function () {
+            var width = this.window.innerWidth;
+            document.getElementById('body_complete').style.maxHeight = (window.innerHeight - 55) + 'px';
+            this.document.getElementById('modal_body_libro').style.width = (window.innerWidth - 250) + 'px';
+            this.document.getElementById('modal_body_libro').style.height = (window.innerHeight - 60) + 'px';
+            this.document.getElementById('modal_body_edit').style.width = (window.innerWidth - 250) + 'px';
+            this.document.getElementById('modal_body_edit').style.height = (window.innerHeight - 130) + 'px';
+            if (width > 760) {
+                document.getElementById('div_body_detalle_libro').style.width = (window.innerWidth - 100) + 'px';
+            }
+            else {
+                document.getElementById('div_body_detalle_libro').style.width = (window.innerWidth - 50) + 'px';
+            }
+        });
+
+        window.addEventListener('resize', function () {
+            var width = this.window.innerWidth;
+            document.getElementById('body_complete').style.maxHeight = (window.innerHeight - 55) + 'px';
+            this.document.getElementById('modal_body_libro').style.width = (window.innerWidth - 250) + 'px';
+            this.document.getElementById('modal_body_libro').style.height = (window.innerHeight - 60) + 'px';
+
+            this.document.getElementById('modal_body_edit').style.width = (window.innerWidth - 250) + 'px';
+            this.document.getElementById('modal_body_edit').style.height = (window.innerHeight - 130) + 'px';
+            if (width > 760) {
+                document.getElementById('div_body_detalle_libro').style.width = (window.innerWidth - 100) + 'px';
+            }
+            else {
+                document.getElementById('div_body_detalle_libro').style.width = (window.innerWidth - 50) + 'px';
+            }
+        });
+    </script>
+</body>
+</html>

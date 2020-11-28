@@ -1,0 +1,265 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/Content/body.css" type="text/css" />
+    <title>Aula Virtual</title>
+    </head>
+<body style="background-color: rgba(0, 0, 0, 0.017);">
+    <div class="body-App div_body">
+        <div class="search_books">
+            <div class="background_principal">
+                <form class="form_books">
+                    <label class="Label_form">
+                        <span>¡Encuentra toda la información que buscas, aquí!</span>
+                    </label>
+                   
+                    <a href="@Url.Action("Index","Libros")" id="a_cambio">Entra aquí</a>
+                </form>
+            </div>
+        </div>
+        <div>
+            <div class="Presentacion_div_principal">
+                <div class="grid-container">
+                    <div class="item3">
+                        <div>
+                            <div class="Image_div_PresentacionCard">
+                                <div class="card_presentacion" onclick="document.getElementById('LibrosLink').click();">
+                                  
+                                    <div class="div_descripcion">
+                                        <label>@Html.ActionLink("Documentos", "Index", "Libros", new { area = "" }, new { @style = "color:white; text-decoration:none", @id = "LibrosLink" })</label>
+                                        <div class="div_Descripcion_Especifico">
+                                            <label class="descripcion_label">Puedes encontrar diversos documentos relacionados a la educación en general.</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item3">
+                        <div>
+                            <div class="Image_div_PresentacionCard">
+                                <div class="card_presentacion" onclick="document.getElementById('SesionesLink').click();">
+                                 
+                                    <div class="div_descripcion">
+                                        <label>@Html.ActionLink("Sesiones", "Index", "Sesion", new { area = "" }, new { @style = "color:white; text-decoration:none", @id = "SesionesLink" })</label>
+                                        <div class="div_Descripcion_Especifico">
+                                            <label class="descripcion_label">Puedes encontrar diversas sesiones de aprendizaje relacionadas a la educación.</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        </div>
+        <div>
+            <hr class="hr_separate" />
+            <div class="div_informacion">
+                <div class="image_div image_laboral">
+                </div>
+                <div class="data_div data_div_experiencia">
+                    <label class="label_titulo_datos">Experiencia laboral</label>
+                    <ul class="list_data">
+                        <li>
+                            Monitor y Especialista en el Programa de Capacitación y Formación Permanente - ISPE Indoamerica - MINEDU.
+                        </li>
+                        <li>
+                            Capacitador de Profesores, Directores y Subdirectores inscritos en el Concurso Público para acceso a cargos de Director
+                            y Subdirector de I.E.P. 2014 en el ISPE Indoamerica - MINEDU.
+                        </li>
+                        <li>
+                            Facilitadro en la Capacitación de Profesores, Directores y Subdirectores inscritos en el Concurso Público para acceso a cargos de Director
+                            y Subdirector de I.E.P. 2014 en la Universidad Nacional de Trujillo - MINEDU.
+                        </li>
+                        <li>
+                            Facilitador en la Etapa de Inducción del Programa Nacional de Capacitación y Formación de Directores y 
+                            Subdirectores de I.E.P. de Educación Básica y Educación Técnico Productiva 2015 en la Universidad Nacional de Santa - MINEDU.
+                        </li>
+                        <li>
+                            Formador en el Diplomado en Gestion Escolar y Segunda Especialidad en Gestión Escolar con Liderazgo Pedagógico 2016 - 2017
+                            de la Pontificia Universidad Católica de Trujillo.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="hr_separate" />
+            <div class="div_informacion" id="estudios_div_id">
+                <script>
+                    window.addEventListener('load', function () {
+                        var width = window.innerWidth;
+                        if (width <= 1000) {
+                            document.getElementById('estudios_div_id').innerHTML =
+                                '<div class="image_div image_studies"></div>' +
+                                '<div class="data_div estudios_div data_div_estudios" style="padding:70px 0px">' +
+                                '<label class="label_titulo_datos" > Estudios</label>' +
+                                '<ul class="list_data">' +
+                                '<li>Estudio primarios en la escuela 81030 ex 233 de Chepén.</li>' +
+                                '<li>Estudios secundarios en la G.U.E. Carlos Guitérrez Noriega de Chepén.</li>' +
+                                '<li>Profesor Nivel Primaria en el ISPE David Sánchez Infante de San Pedro de Lloc.</li>' +
+                                '<li>Bachiller en Educación - Universidad Nacional de Trujillo.</li>' +
+                                '<li>Maestría en Educación con mención en Gestión y Acreditación Educativa en la Universidad Privada César Vallejo.</li>' +
+                                '<li>Magister en Educación con mención en Gestión y Acreditación Educativa en la Universidad Católica de Trujillo.</li>' +
+                                '<li>Doctorado en Educación en la Universidad Privada César Vallejo.</li>' +
+                                '</ul>' +
+                                '</div >'
+                        }
+                        else if (width > 1000) {
+                            document.getElementById('estudios_div_id').innerHTML =
+                                '<div class="data_div estudios_div data_div_estudios" style="padding:70px 0px">' +
+                                '<label class="label_titulo_datos"> Estudios</label>' +
+                                '<ul class="list_data">' +
+                                '<li>Estudio primarios en la escuela 81030 ex 233 de Chepén.</li>' +
+                                '<li>Estudios secundarios en la G.U.E. Carlos Guitérrez Noriega de Chepén.</li>' +
+                                '<li>Profesor Nivel Primaria en el ISPE David Sánchez Infante de San Pedro de Lloc.</li>' +
+                                '<li>Bachiller en Educación - Universidad Nacional de Trujillo.</li>' +
+                                '<li>Maestría en Educación con mención en Gestión y Acreditación Educativa en la Universidad Privada César Vallejo.</li>' +
+                                '<li>Magister en Educación con mención en Gestión y Acreditación Educativa en la Universidad Católica de Trujillo.</li>' +
+                                '<li>Doctorado en Educación en la Universidad Privada César Vallejo.</li>' +
+                                '</ul>' +
+                                '</div >' +
+                                '<div class="image_div image_studies"></div>'
+                        }
+
+                    })
+
+                    window.addEventListener('resize', function () {
+                        var width = window.innerWidth;
+                        if (width <= 1000) {
+                            document.getElementById('estudios_div_id').innerHTML =
+                                '<div class="image_div image_studies"></div>' +
+                                '<div class="data_div estudios_div data_div_estudios" style="padding:70px 0px">' +
+                                '<label class="label_titulo_datos" > Estudios</label>' +
+                                '<ul class="list_data">' +
+                                '<li>Estudio primarios en la escuela 81030 ex 233 de Chepén.</li>' +
+                                '<li>Estudios secundarios en la G.U.E. Carlos Guitérrez Noriega de Chepén.</li>' +
+                                '<li>Profesor Nivel Primaria en el ISPE David Sánchez Infante de San Pedro de Lloc.</li>' +
+                                '<li>Bachiller en Educación - Universidad Nacional de Trujillo.</li>' +
+                                '<li>Maestría en Educación con mención en Gestión y Acreditación Educativa en la Universidad Privada César Vallejo.</li>' +
+                                '<li>Magister en Educación con mención en Gestión y Acreditación Educativa en la Universidad Católica de Trujillo.</li>' +
+                                '<li>Doctorado en Educación en la Universidad Privada César Vallejo.</li>' +
+                                '</ul>' +
+                                '</div >'
+                        }
+                        else if (width > 1000) {
+                                document.getElementById('estudios_div_id').innerHTML =
+                                '<div class="data_div estudios_div data_div_estudios" style="padding:70px 0px">' +
+                                '<label class="label_titulo_datos"> Estudios</label>' +
+                                '<ul class="list_data">' +
+                                '<li>Estudio primarios en la escuela 81030 ex 233 de Chepén.</li>' +
+                                '<li>Estudios secundarios en la G.U.E. Carlos Guitérrez Noriega de Chepén.</li>' +
+                                '<li>Profesor Nivel Primaria en el ISPE David Sánchez Infante de San Pedro de Lloc.</li>' +
+                                '<li>Bachiller en Educación - Universidad Nacional de Trujillo.</li>' +
+                                '<li>Maestría en Educación con mención en Gestión y Acreditación Educativa en la Universidad Privada César Vallejo.</li>' +
+                                '<li>Magister en Educación con mención en Gestión y Acreditación Educativa en la Universidad Católica de Trujillo.</li>' +
+                                '<li>Doctorado en Educación en la Universidad Privada César Vallejo.</li>' +
+                                '</ul>' +
+                                '</div >' +
+                                '<div class="image_div image_studies"></div>' 
+                        }
+                    })
+                </script>
+                <div class="data_div estudios_div data_div_estudios">
+                    <label class="label_titulo_datos">Estudios</label>
+                    <ul class="list_data">
+                        <li>
+                            Estudio primarios en la escuela 81030 ex 233 de Chepén.
+                        </li>
+                        <li>
+                            Estudios secundarios en la G.U.E. Carlos Guitérrez Noriega de Chepén.
+                        </li>
+                        <li>
+                            Profesor Nivel Primaria en el ISPE David Sánchez Infante de San Pedro de Lloc.
+                        </li>
+                        <li>
+                            Bachiller en Educación - Universidad Nacional de Trujillo.
+                        </li>
+                        <li>
+                            Maestría en Educación con mención en Gestión y Acreditación Educativa en la Universidad Privada César Vallejo.
+                        </li>
+                        <li>
+                            Magister en Educación con mención en Gestión y Acreditación Educativa en la Universidad Católica de Trujillo.
+                        </li>
+                        <li>
+                            Doctorado en Educación en la Universidad Privada César Vallejo.
+                        </li>
+                    </ul>
+                </div>
+                <div class="image_div image_studies">
+                </div>
+            </div>
+            <hr class="hr_separate" />
+        </div>
+        <div>
+            <div class="div_principal_titulos">
+                <div class="div_imagen_titular">
+                    <label class="foto_titular"></label>
+                </div>
+                <div class="div_titulos">
+                    <ul class="list_titulo">
+                        <li>
+                            Doctor en Educación.
+                        </li>
+                        <li>
+                            Magister en Educación con mención en Gestión y Administración Educativa.
+                        </li>
+                        <li>
+                            Magister en Educación con mención en Gestión y Acreditación Educativa.
+                        </li>
+                        <li>
+                            Aplicador y Capacitador de Rúbricas de Observación de Aula para la evaluación de desempeño docente - MINEDU.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="hr_separate" />
+        </div>
+        <div class="footer_inicio">
+            <div class="footer_inicio_link">
+                <div class="footer_primera_parte">
+                    <ul class="lista_links">
+                        <li>
+                            <section>
+                                @Html.ActionLink("Inicio", "Index", "Home", new { area = "" }, new { @style = "color:white; text-decoration:none" })
+                            </section>
+                        </li>
+                        <li>
+                            <section>
+                                @Html.ActionLink("Sesiones", "Index", "Sesion", new { area = "" }, new { @style = "color:white; text-decoration:none" })
+                            </section>
+                        </li>
+                        <li>
+                            <section>
+                                @Html.ActionLink("Libros", "Index", "Libros", new { area = "" }, new { @style = "color:white; text-decoration:none" })
+                            </section>
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer_segundo_parte">
+                    <ul class="lista_links">
+                        <li>
+                            <section>
+                                @Html.ActionLink("Iniciar sesión", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @style = "color:white; text-decoration:none" })
+                            </section>
+                        </li>
+                        <li>
+                            <section>
+                                @Html.ActionLink("Registrarse", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @style = "color:white; text-decoration:none" })
+                            </section>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr />
+            <div class="walter">
+                <span>Walter Chavarry - @DateTime.Now.Year</span>
+            </div>
+               
+</div>
+    </div>
+</body>
+</html>

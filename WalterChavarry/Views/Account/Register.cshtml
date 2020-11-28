@@ -1,0 +1,69 @@
+﻿@model WalterChavarry.Models.RegisterViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/Content/body.css" type="text/css" />
+    <title>Registrarse  </title>
+</head>
+<body style="background-color: rgba(0, 0, 0, 0.017) !important;">
+    <center>
+        <div class="div_create_libro">
+            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                <center>
+                    <div id="div_register_principal" class="div_register_principal">
+
+
+                        <div class="register_div" style="text-align:left;">
+                            @Html.AntiForgeryToken()
+                            <label class="span_titulo">Registrarse</label><br /><br />
+                           
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Email, new { @class = "span_comentario label_create" })
+                                <div class="col-md-10 col_per" style="display:block; width:100%">
+                                    @Html.TextBoxFor(m => m.Email, new { @class = "nombre_input_nuevo_comentario input_text", @placeholder = "Escribir correo electrónico..." })
+                                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger text_error" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.NombreUsuario, new { @class = "span_comentario label_create" })
+                                <div class="col-md-10 col_per" style="display:block; width:100%">
+                                    @Html.TextBoxFor(m => m.NombreUsuario, new { @class = "nombre_input_nuevo_comentario input_text", @placeholder = "Escribir nombre de usuario..." })
+                                    @Html.ValidationMessageFor(m => m.NombreUsuario, "", new { @class = "text-danger text_error" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Password, new { @class = "span_comentario label_create" })
+                                <div class="col-md-10 col_per" style="display:block; width:100%">
+                                    @Html.PasswordFor(m => m.Password, new { @class = "nombre_input_nuevo_comentario input_text", @placeholder = "Escribir contraseña..." })
+                                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger text_error" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ConfirmPassword, new { @class = "span_comentario label_create" })
+                                <div class="col-md-10 col_per" style="display:block; width:100%">
+                                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "nombre_input_nuevo_comentario input_text", @placeholder = "Repetir contraseña..." })
+                                    @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger text_error" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="REGISTRARSE" class="agregar_button" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </center>
+            }
+        </div>
+    </center>
+</body>
+</html>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

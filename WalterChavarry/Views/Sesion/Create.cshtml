@@ -1,0 +1,61 @@
+﻿@model WalterChavarry.Models.Sesion
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/Content/body.css" type="text/css" />
+    <title>Crear Sesión</title>
+</head>
+<body style="background-color: rgba(0, 0, 0, 0.017) !important;">
+    <div class="div_create_libro">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+        <div class="create_body">
+
+            <div class="form-horizontal">
+                <label class="span_titulo">Nueva sesión</label><br /><br />
+                <div class="form-group">
+                    @Html.Label("Nombre", htmlAttributes: new { @class = "span_comentario label_create" })
+                    <br />
+                    <div class="col-md-10 col_per">
+                        @Html.EditorFor(model => model.NombreSesion, new { htmlAttributes = new { @class = "nombre_input_nuevo_comentario input_text", @placeholder = "Agregar nombre..." } })
+                        @Html.ValidationMessageFor(model => model.NombreSesion, "", new { @class = "text-dange" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Descripcion, htmlAttributes: new { @class = "span_comentario label_create" })
+                    <div class="col-md-10  col_per" style="width:100%">
+                        <textarea name="Descripcion" class="comentario_input_nuevo_comentario" wrap="soft" placeholder="Agregar descripción..." id="area_comentario"></textarea>
+
+                        @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-dange" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Palabras clave", htmlAttributes: new { @class = "span_comentario label_create" }) <label class="tiempo_comentario">(Separar con ";")</label>
+                    <br />
+                    <div class="col-md-10  col_per" style="width:100%">
+                        @Html.EditorFor(model => model.Palabras_Clave, new { htmlAttributes = new { @class = "nombre_input_nuevo_comentario", @placeholder = "Agregar..." } })
+                        @Html.ValidationMessageFor(model => model.Palabras_Clave, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10 col_per">
+                        <input type="submit" value="CREAR" class="agregar_button" />
+                    </div>
+                </div>
+            </div>
+            </div>
+            }
+        </div>
+</body>
+</html>
+

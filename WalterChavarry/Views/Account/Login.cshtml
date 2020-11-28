@@ -1,0 +1,77 @@
+﻿@using WalterChavarry.Models
+@model LoginViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/Content/body.css" type="text/css" />
+    <title>Login</title>
+</head>
+<body style="background-color: rgba(0, 0, 0, 0.017) !important;">
+    <center>
+        <div class="div_create_libro">
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                <center>
+                    <div id="div_register_principal" class="div_register_principal">
+
+
+                        <div class="register_div" style="text-align:left;">
+                            @Html.AntiForgeryToken()
+                            <label class="span_titulo">Iniciar sesión</label><br /><br />
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Email, new { @class = "span_comentario label_create" })
+                                <div class="col-md-10 col_per" style="display:block; width:100%">
+                                    @Html.TextBoxFor(m => m.Email, new { @class = "nombre_input_nuevo_comentario input_text", @placeholder = "Escribir correo electrónico..." })
+                                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger text_error" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Nombre de usuario", new { @class = "span_comentario label_create" })
+                                <div class="col-md-10 col_per" style="display:block; width:100%">
+                                    @Html.TextBoxFor(m => m.NombreUsuario, new { @class = "nombre_input_nuevo_comentario input_text", @placeholder = "Escribir nombre de usuario..." })
+                                    @Html.ValidationMessageFor(m => m.NombreUsuario, "", new { @class = "text-danger text_error" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Password, new { @class = "span_comentario label_create" })
+                                <div class="col-md-10 col_per" style="display:block; width:100%">
+                                    @Html.PasswordFor(m => m.Password, new { @class = "nombre_input_nuevo_comentario input_text", @placeholder = "Escribir contraseña..." })
+                                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger text-error" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-10 col_per" style="display:block; width:100%">
+                                    <div class="checkbox" style="margin-left:22px">
+                                        @Html.CheckBoxFor(m => m.RememberMe)
+                                        @Html.LabelFor(m => m.RememberMe, new { @style = "padding-left:5px" })
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <a href="@Url.Action("register","Account")" class="registro_label">REGISTRARSE</a>
+                             
+
+                                <input type="submit" value="INICIAR SESIÓN" class="agregar_button" />
+                       
+
+                            </div>
+
+                        </div>
+                    </center>
+                            }
+                        </div>
+                </center>
+</body>
+</html>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,302 @@
+﻿@model WalterChavarry.Models.Libros
+
+@using WalterChavarry.Models
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/Content/body.css" type="text/css" />
+    <title>@Model.Titulo</title>
+</head>
+<body style="background-color: rgba(0, 0, 0, 0.017) !important;">
+    
+    <div>
+        <div class="div_titulo">
+            <div class="title_div">
+                <img src="~/Content/Imagenes/iconfinder_icon-55-document-text_315178.svg" alt=""  onclick="window.location.href = '/Libros/Index';" />
+                <label style="font-weight:500" onclick="window.location.href = '/Libros/Index';">Documentos</label>
+            </div>
+            <div class="search_div">
+                @using (Html.BeginForm("Index", "Libros", FormMethod.Post))
+                {
+                    <input type="search" name="Palabra" />
+                    <input type="submit" />
+                }
+            </div>
+        </div>
+    </div>
+    <div class="modal_datos_comentario_nuevo" id="modal_datos_comentario_nuevo">
+        <div class="modal_datos_comentario_nuevo_body" id="modal_datos_comentario_nuevo_body">
+            <span class="aspa_close_modal" onclick="document.getElementById('modal_datos_comentario_nuevo').style.display = 'none'; document.getElementById('comentario_input').value = '';">&#215;</span>
+            <span class="span_titulo">Nuevo comentario</span>
+            <div class="div_comentario_nuevo">
+                @using (Html.BeginForm("CreateComentario", "Libros", FormMethod.Post))
+                {
+                    <input type="text" name="usuario" class="nombre_input_nuevo_comentario" placeholder="Nombre de usuario" />
+                    <div class="part_comentario_nuevo">
+                        <span class="span_comentario">Comentario:</span>
+                        <div>
+                            <textarea maxlength="400" name="comentario" class="comentario_input_nuevo_comentario" wrap="soft" placeholder="Agregar comentario..." id="area_comentario"></textarea>
+                        </div>
+                    </div>
+                    <input type="number" name="LibroId" value="@Model.LibrosId" id="input_comentario_libroId" style="display:none" />
+                    <input type="submit" value="ACEPTAR" class="agregar_button" />
+                }
+
+            </div>
+
+        </div>
+    </div>
+    <div id="body_complete" class="body_complete">
+        <div class="div_body_detalle_libro" id="div_body_detalle_libro">
+            
+            <div class="div_body_interior_detalle">
+                <div style="margin-bottom:45px">
+                    <a type="submit" style="text-decoration:none" class="agregar_button" href="@Url.Action("Index","Libros")">RETROCEDER</a>
+                </div>
+                <ul class="lista_detalle">
+                    <li>
+                        <div class="Image_document">
+                            <img id="img_detalle" src="@Url.Action("GetImage", "Libros", new { libroId = Model.LibrosId })" />
+                        </div>
+                    </li>
+                    <li id="second_detalle">
+
+                        <div class="datos_detalle_libro" id="datos_titulo_detalle">
+
+                            <div class="datos_titulo" id="datos_titulo">
+                                @Model.Titulo
+                            </div>
+                            <div class="datos_autor_fecha" id="datos_autor_fecha">
+                                <label class="autor_Detalle" id="autor_Detalle">@Model.Autor</label> -
+                                <label class="fecha_Detalle" id="fecha_Detalle">@Model.Anio</label>
+                            </div>
+                            <label style="font-size:15px;font-weight:600 !important;">Descripción:</label>
+                            <div class="datos_descripcion" id="datos_descripcion">
+
+                                @Model.Descripcion
+                            </div>
+                        </div>
+                        @{
+                            List<string> listaPalabras = new List<string>();
+                            string var_palabra = "";
+                            int count = Model.PalabrasClave.ToCharArray().Count();
+                            int ichar = 1;
+                            foreach (char c in Model.PalabrasClave.ToCharArray())
+                            {
+                                if (ichar < count)
+                                {
+                                    if (c == ';')
+                                    {
+                                        listaPalabras.Add(var_palabra);
+                                        var_palabra = "";
+                                    }
+                                    else if (c == ' ')
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        var_palabra += c;
+                                    }
+                                    ichar++;
+                                }
+                                else
+                                {
+                                    var_palabra += c;
+                                    listaPalabras.Add(var_palabra);
+                                    var_palabra = "";
+                                }
+
+                            }
+                        }
+                        <div class="palabras_detalle" id="palabras_detalle">
+                            Palabras clave:
+                            @{
+                                foreach (string sitem in listaPalabras)
+                                {
+                                <label class="item_palabra" onclick="document.getElementById('input_@sitem').click();">@sitem</label>
+                                    using (Html.BeginForm("Index", "Libros", FormMethod.Post,new { @style="display:none"}))
+                                    {
+                                <input type="text" name="Palabra" value="@sitem" style="display:none" />
+                                <input type="submit" style="display:none" id="input_@sitem" />
+                                    }
+
+
+                                }
+                            }
+                        </div>
+
+                        <div class="button_detalle" id="button_detalle">
+                            @*<input type="submit" value="Descargar" />*@
+                            <a href="@Url.Action("GetDocumento","Libros",new { libroId = Model.LibrosId})" download="@Model.Titulo">Descargar</a>
+
+
+                        </div>
+
+                    </li>
+                </ul>
+                <div>
+                    <hr />
+                    <label style="font-size:14.5px;font-weight:500">Comentarios:</label>
+
+                    <div class="nuevo_comentario">
+                        <div class="nuevo_comentario_interior">
+                            <input class="comentario_input" type="text" name="comentario" placeholder="Añade un comentario..." id="comentario_input" />
+                        </div>
+                        <input class="agregar_button" type="submit" value="AGREGAR" onclick="document.getElementById('area_comentario').value = document.getElementById('comentario_input').value; document.getElementById('modal_datos_comentario_nuevo').style.display = 'block';" />
+                    </div>
+
+                    @{
+                        foreach (var item in ViewBag.ListaComentario as List<Comentario>)
+                        {
+                            string respuesta = "";
+
+                            DateTime dateComentario = item.Fecha;
+                            int anio = Convert.ToInt32(dateComentario.ToString("yyyy"));
+                            int mes = Convert.ToInt32(dateComentario.ToString("MM"));
+                            int dia = Convert.ToInt32(dateComentario.ToString("dd"));
+                            int hora = Convert.ToInt32(dateComentario.ToString("HH"));
+                            int minuto = Convert.ToInt32(dateComentario.ToString("mm"));
+
+                            DateTime fechaActual = DateTime.Now;
+
+                            int anioActual = Convert.ToInt32(fechaActual.ToString("yyyy"));
+                            int mesActual = Convert.ToInt32(fechaActual.ToString("MM"));
+                            int diaActual = Convert.ToInt32(fechaActual.ToString("dd"));
+                            int horaActual = Convert.ToInt32(fechaActual.ToString("HH"));
+                            int minutoActual = Convert.ToInt32(fechaActual.ToString("mm"));
+
+                            if(anioActual > anio)
+                            {
+                                int margenAnio = anioActual - anio;
+                                if(margenAnio == 1)
+                                {
+                                    respuesta = "Hace " + margenAnio + "año.";
+                                }
+                                else
+                                {
+                                    respuesta = "Hace " + margenAnio + " años.";
+                                }
+                            }
+
+                            else
+                            {
+                                if(mesActual == mes)
+                                {
+                                    if(diaActual == dia)
+                                    {
+                                        if(horaActual == hora)
+                                        {
+                                            if(minutoActual == minuto)
+                                            {
+                                                respuesta = "Hace unos segundos.";
+                                            }
+                                            else
+                                            {
+                                                int margenMinuto = minutoActual - minuto;
+                                                if(margenMinuto == 1)
+                                                {
+                                                    respuesta = "Hace " + margenMinuto + " minuto.";
+                                                }
+                                                else
+                                                {
+                                                    respuesta = "Hace " + margenMinuto + " minutos.";
+                                                }
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            int margenHora = horaActual - hora;
+                                            if(margenHora == 1)
+                                            {
+                                                respuesta = "Hace " + margenHora + " hora.";
+                                            }
+                                            else
+                                            {
+                                                respuesta = "Hace " + margenHora + " horas.";
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        int margenDia = diaActual - dia;
+                                        if (margenDia == 1)
+                                        {
+                                            respuesta = "Hace " + margenDia + " día.";
+                                        }
+                                        else
+                                        {
+                                            respuesta = "Hace " + margenDia + " días.";
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    int margenMes = mesActual - mes;
+                                    if(margenMes == 1)
+                                    {
+                                        respuesta = "Hace " + margenMes + " mes.";
+                                    }
+                                    else
+                                    {
+                                        respuesta = "Hace " + margenMes + " meses.";
+                                    }
+                                }
+                            }
+
+                        <div class="comentario_item">
+                            <label class="nombre_persona_comentario">@item.Usuario</label><label class="tiempo_comentario">@respuesta</label>
+                            <div class="comentario_texto">
+                                <label>@item.Comentario_text</label>
+                            </div>
+                        </div>
+                        }
+                    }
+
+                    <label style="margin-top:10px; font-weight:500; font-size:15px">@ViewBag.CantidadComentario</label>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        
+
+        window.addEventListener('load', function () {
+            var width = this.window.innerWidth;
+            document.getElementById('body_complete').style.maxHeight = (window.innerHeight - 100) + 'px';
+          
+            this.document.getElementById('modal_datos_comentario_nuevo_body').style.width = (window.innerWidth - 250) + 'px';
+            if (width > 760) {
+                document.getElementById('div_body_detalle_libro').style.width = (window.innerWidth - 100) + 'px';
+            }
+            else {
+                document.getElementById('div_body_detalle_libro').style.width = (window.innerWidth - 50) + 'px';
+            }
+         
+        });
+
+        window.addEventListener('resize', function () {
+            var width = this.window.innerWidth;
+            document.getElementById('body_complete').style.maxHeight = (window.innerHeight - 100) + 'px';
+            
+            this.document.getElementById('modal_datos_comentario_nuevo_body').style.width = (window.innerWidth - 250) + 'px';
+            if (width > 760) {
+                document.getElementById('div_body_detalle_libro').style.width = (window.innerWidth - 100) + 'px';
+            }
+            else {
+                document.getElementById('div_body_detalle_libro').style.width = (window.innerWidth - 50) + 'px';
+            }
+           
+        });
+    </script>
+</body>
+</html>

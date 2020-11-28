@@ -1,0 +1,347 @@
+﻿@model WalterChavarry.Models.Tareas
+@using WalterChavarry.Models
+
+@{
+
+    AdoCollect ad = new AdoCollect();
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="~/Content/body.css" type="text/css" />
+    <title>@Model.Titulo_Tarea</title>
+</head>
+<body style="background-color: rgba(0, 0, 0, 0.017) !important;">
+    <div>
+        <div class="div_titulo">
+            <div class="title_div">
+                <img style="cursor:pointer" src="~/Content/Imagenes/iconfinder_icon-55-document-text_315178.svg" alt="" onclick="window.location.href = '/Sesion/Index';" />
+                <label style="font-weight:500;cursor:pointer" onclick="window.location.href = '/Sesion/Index';">Sesiones</label>
+            </div>
+            <div class="search_div">
+                @using (Html.BeginForm("Index", "Sesion", FormMethod.Post))
+                {
+                    <input type="search" name="Palabra" />
+                    <input type="submit" />
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="modal_datos_comentario_nuevo" id="modal_datos_comentario_nuevo">
+        <div style="margin-top: -20px !important;min-width: 380px !important;" class="modal_datos_comentario_nuevo_body" id="modal_datos_comentario_nuevo_body">
+            <span class="aspa_close_modal" onclick="document.getElementById('modal_datos_comentario_nuevo').style.display = 'none'; document.getElementById('comentario_input').value = '';">&#215;</span>
+            <span class="span_titulo">Nuevo comentario</span>
+            <div class="div_comentario_nuevo">
+                @using (Html.BeginForm("CreateComentario", "Sesion", FormMethod.Post,new { enctype= "multipart/form-data" }))
+                {
+                    <input type="text" name="usuario" class="nombre_input_nuevo_comentario" placeholder="Nombre de usuario" />
+                    <input type="number" value="3" name="Tipo" style="display:none" />
+
+
+                    <div class="part_comentario_nuevo">
+                        <span class="span_comentario">Comentario:</span>
+                        <div>
+                            <textarea maxlength="400" name="comentario" class="comentario_input_nuevo_comentario" wrap="soft" placeholder="Agregar comentario..." id="area_comentario"></textarea>
+                        </div>
+                    </div>
+                    <input type="number" name="SesionId" value="@Model.TareasId" id="input_comentario_libroId" style="display:none" />
+
+                    <div class="form-group" style="margin-top:30px;">
+                        @Html.Label("Archivo", htmlAttributes: new { @class = "col-md-2 span_comentario" })
+                        <div class="col-md-10 col_per">
+                            <input type="file" name="ArchivoComentario" id="archivo_comentario" onchange="ChangeArchivo();" />
+                            <input type="text" name="NombreArchivo" id="archivo_nombre" style="display:none"  />
+                            <input type="text" name="TipoArchivo" id="tipo_archivo"  style="display:none" />
+
+                        </div>
+                    </div>
+
+                    <input type="submit" value="ACEPTAR" class="agregar_button" />
+                }
+
+            </div>
+
+        </div>
+    </div>
+    <div id="body_complete" class="body_complete">
+        <div class="div_body_detalle_libro" id="div_body_detalle_libro" style="margin-left:40px !important">
+            <div class="div_body_interior_detalle">
+                <div style="margin-bottom:45px">
+                    <a type="submit" style="text-decoration:none" class="agregar_button" href="@Url.Action("DetalleSesion","Sesion",new { SesionId = Model.SesionId})">RETROCEDER</a>
+                </div>
+                <div>
+                   
+                    <ul class="lista_detalle">
+                        <li>
+                            <div class="Image_document">
+                                <img width="160" height="180" style="height:230px" id="img_detalle" src="@Model.UrlImagen" />
+                            </div>
+                        </li>
+                        <li id="second_detalle">
+
+                            <div class="datos_detalle_libro" id="datos_titulo_detalle">
+
+                                <div class="datos_titulo" id="datos_titulo" style="margin-bottom:20px;">
+                                    @Model.Titulo_Tarea
+                                </div>
+                                <label style="font-size:15px;font-weight:600 !important;margin-bottom:12px;">Descripción:</label>
+
+                                <div class="datos_descripcion" id="datos_descripcion">
+
+                                    @Model.Descripcion
+                                </div>
+                                <div class="button_detalle" id="button_detalle">
+                                    <input type="submit" value="Instrucciones" onclick="document.getElementById('modal_libro').style.display = 'block';" />
+                                </div>
+                            </div>
+
+                          
+                        </li>
+                    </ul>
+                </div>
+                <hr />
+                <div class="lista_tareas">
+                    <label style="font-weight:500;margin:0px 5px 15px;" class="span_titulo">Archivos</label><br />
+                    @{
+                        List<Archivo> listaArchivos = ad.Archivos.Where(x => x.TareaId == Model.TareasId).ToList();
+                        if (listaArchivos.Count() == 0)
+                        {
+                            <label style="margin-top:10px; font-weight:500; font-size:15px"> No tiene tareas.</label>
+
+                        }
+                        else
+                        {
+                            foreach (Archivo archivo in listaArchivos)
+                            {
+
+                                <ul>
+                                    <li></li>
+                                    <li>
+                                        <label>
+                                            @archivo.NombreArchivo
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <a style="text-decoration:none" href="@Url.Action("GetDocumento", "Sesion", new { archivoId = archivo.ArchivoId })" download="@archivo.NombreArchivo">Descargar</a>
+                                        </label>
+                                    </li>
+                                </ul>
+                            }
+                        }
+
+                    }
+
+                </div>
+                <div>
+                    <hr />
+                    <label style="font-size:14.5px;font-weight:500">Comentarios:</label>
+
+                    <div class="nuevo_comentario">
+                        <div class="nuevo_comentario_interior">
+                            <input class="comentario_input" type="text" name="comentario" placeholder="Añade un comentario..." id="comentario_input" />
+                        </div>
+                        <input class="agregar_button" type="submit" value="AGREGAR" onclick="document.getElementById('area_comentario').value = document.getElementById('comentario_input').value; document.getElementById('modal_datos_comentario_nuevo').style.display = 'block';" />
+                    </div>
+
+                    @{
+                        foreach (var item in ViewBag.ListaComentario as List<ComentarioSesiones>)
+                        {
+                            string respuesta = "";
+
+                            DateTime dateComentario = item.Fecha;
+                            int anio = Convert.ToInt32(dateComentario.ToString("yyyy"));
+                            int mes = Convert.ToInt32(dateComentario.ToString("MM"));
+                            int dia = Convert.ToInt32(dateComentario.ToString("dd"));
+                            int hora = Convert.ToInt32(dateComentario.ToString("HH"));
+                            int minuto = Convert.ToInt32(dateComentario.ToString("mm"));
+
+                            DateTime fechaActual = DateTime.Now;
+
+                            int anioActual = Convert.ToInt32(fechaActual.ToString("yyyy"));
+                            int mesActual = Convert.ToInt32(fechaActual.ToString("MM"));
+                            int diaActual = Convert.ToInt32(fechaActual.ToString("dd"));
+                            int horaActual = Convert.ToInt32(fechaActual.ToString("HH"));
+                            int minutoActual = Convert.ToInt32(fechaActual.ToString("mm"));
+
+                            if (anioActual > anio)
+                            {
+                                int margenAnio = anioActual - anio;
+                                if (margenAnio == 1)
+                                {
+                                    respuesta = "Hace " + margenAnio + "año.";
+                                }
+                                else
+                                {
+                                    respuesta = "Hace " + margenAnio + " años.";
+                                }
+                            }
+
+                            else
+                            {
+                                if (mesActual == mes)
+                                {
+                                    if (diaActual == dia)
+                                    {
+                                        if (horaActual == hora)
+                                        {
+                                            if (minutoActual == minuto)
+                                            {
+                                                respuesta = "Hace unos segundos.";
+                                            }
+                                            else
+                                            {
+                                                int margenMinuto = minutoActual - minuto;
+                                                if (margenMinuto == 1)
+                                                {
+                                                    respuesta = "Hace " + margenMinuto + " minuto.";
+                                                }
+                                                else
+                                                {
+                                                    respuesta = "Hace " + margenMinuto + " minutos.";
+                                                }
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            int margenHora = horaActual - hora;
+                                            if (margenHora == 1)
+                                            {
+                                                respuesta = "Hace " + margenHora + " hora.";
+                                            }
+                                            else
+                                            {
+                                                respuesta = "Hace " + margenHora + " horas.";
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        int margenDia = diaActual - dia;
+                                        if (margenDia == 1)
+                                        {
+                                            respuesta = "Hace " + margenDia + " día.";
+                                        }
+                                        else
+                                        {
+                                            respuesta = "Hace " + margenDia + " días.";
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    int margenMes = mesActual - mes;
+                                    if (margenMes == 1)
+                                    {
+                                        respuesta = "Hace " + margenMes + " mes.";
+                                    }
+                                    else
+                                    {
+                                        respuesta = "Hace " + margenMes + " meses.";
+                                    }
+                                }
+                            }
+                            
+                        <div class="comentario_item" style="display:flex">
+                            <div style="width:70%;">
+                                <label class="nombre_persona_comentario">@item.Usuario</label><label class="tiempo_comentario">@respuesta</label>
+                                <div class="comentario_texto">
+                                    <label>@item.Comentario_text</label>
+                                </div>
+                            </div>
+                            
+                            <div style="float:right; width:30%;">
+                                @{
+                                    if (item.ArchivoComentario == null)
+                                    {
+                                        <div style="float:right">
+                                            <label style="text-align:right">
+                                                No hay archivos.
+                                            </label>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div style="float:right">
+                                            <a style="text-decoration:none" class="agregar_button" href="@Url.Action("GetDocumentoxComentario", "Sesion", new { comentarioId = item.ComentarioSesionesId })" download="@item.NombreArchivo">Descargar</a>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        }
+                    }
+
+                    <label style="margin-top:10px; font-weight:500; font-size:15px">@ViewBag.CantidadComentario</label>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal_libro" id="modal_libro">
+        <div class="modal_body_libro" id="modal_body_libro" style="padding:40px;">
+            <span class="aspa_close_modal" onclick="document.getElementById('modal_libro').style.display= 'none'">&#215;</span>
+            <div >
+                <label style="font-size:15px;font-weight:600 !important;margin-bottom:12px;">Instrucciones</label>
+                <br />
+                @Model.Instrucciones
+                <div class="palabras_detalle" id="palabras_detalle">
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+
+        function ChangeArchivo() {
+            var nombre = document.getElementById('archivo_comentario').files[0].name;
+            var tipo_archivo = nombre.lastIndexOf(".");
+            var nombre_archivo = nombre.substring(0, tipo_archivo);
+            var tipoFile = nombre.substr(tipo_archivo + 1);
+            document.getElementById('archivo_nombre').value = nombre_archivo;
+            document.getElementById('tipo_archivo').value = tipoFile;
+        }
+
+        window.addEventListener('load', function () {
+            var width = this.window.innerWidth;
+            document.getElementById('body_complete').style.maxHeight = (window.innerHeight - 90) + 'px';
+            document.getElementById('modal_body_libro').style.width = (window.innerWidth - 100) + 'px';
+            document.getElementById('modal_body_libro').style.height = (window.innerHeight - 90) + 'px';
+            this.document.getElementById('modal_datos_comentario_nuevo_body').style.width = (width - 250) + 'px';
+
+            if (width > 760) {
+                document.getElementById('div_body_detalle_libro').style.width = (window.innerWidth - 100) + 'px';
+            }
+            else {
+                document.getElementById('div_body_detalle_libro').style.width = (window.innerWidth - 50) + 'px';
+            }
+        });
+
+        window.addEventListener('resize', function () {
+            var width = this.window.innerWidth;
+            document.getElementById('body_complete').style.maxHeight = (window.innerHeight - 90) + 'px';
+            document.getElementById('modal_body_libro').style.width = (window.innerWidth - 100) + 'px';
+            document.getElementById('modal_body_libro').style.height = (window.innerHeight - 90) + 'px';
+
+            this.document.getElementById('modal_datos_comentario_nuevo_body').style.width = (width - 250) + 'px';
+            if (width > 760) {
+                document.getElementById('div_body_detalle_libro').style.width = (window.innerWidth - 100) + 'px';
+            }
+            else {
+                document.getElementById('div_body_detalle_libro').style.width = (window.innerWidth - 50) + 'px';
+            }
+        });
+    </script>
+</body>
+</html>
